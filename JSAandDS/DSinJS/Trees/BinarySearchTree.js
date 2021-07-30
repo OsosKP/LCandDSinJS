@@ -55,17 +55,54 @@ class BinarySearchTree {
         return curr;
     }
 
-    dfs() {
-        const list = [this.root];
+    dfsInOrder() {
         const result = [];
 
-        const dfsSearch = (stack) => {
-            if (!stack.length) return result;
-            const popped = stack.unshift();
-            if (popped.left) return dfsSearch(stack);
+        const traverse = (node) => {
+            if (node.left) traverse(node.left);
+            result.push(node.value);
+            if (node.right) traverse(node.right);
         }
 
-        return dfsSearch(list);
+        traverse(this.root);
+        return result;
+    }
+    
+    dfsPost() {
+        const result = [];
+
+        const traverse = (node) => {
+            if (node.left) traverse(node.left);
+            if (node.right) traverse(node.right);
+            result.push(node.value);
+        }
+
+        traverse(this.root);
+        return result;
+    }
+
+    dfsPre() {
+        const result = [];
+
+        const traverse = (node) => {
+            result.push(node.value);
+            if (node.left) traverse(node.left);
+            if (node.right) traverse(node.right);
+        }
+
+        traverse(this.root);
+        return result;
+
+        // const dfsSearch = (stack) => {
+        //     if (!stack.length) return result;
+        //     const popped = stack.shift();
+        //     result.push(popped.value)
+        //     if (popped.right) stack.unshift(popped.right);
+        //     if (popped.left) stack.unshift(popped.left);
+        //     return dfsSearch(stack);
+        // }
+
+        // return dfsSearch(list);
     }
 
     bfs() {
@@ -93,5 +130,7 @@ bst.insert(8);
 bst.insert(20);
 
 
-console.log(bst.dfs());
+console.log(bst.dfsPre());
+console.log(bst.dfsPost());
+console.log(bst.dfsInOrder());
 console.log(bst.bfs());
