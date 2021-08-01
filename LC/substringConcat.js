@@ -1,3 +1,10 @@
+const print = (string, i, j, count, map) => {
+    console.log("--------------------");
+    console.log(string + "\t\t" + count);
+    console.log(`${" ".repeat(i)}i${" ".repeat(j - i - 1)}j`);
+    console.log(map);
+}
+
 const findSubstring = (s, words) => {
     const map = words.reduce((map, word) => {
         map[word] = map[word] + 1 || 1;
@@ -10,36 +17,30 @@ const findSubstring = (s, words) => {
     const windowLength = wordLength * words.length;
     let i = 0, j = 0;
 
-    while (j < s.length) {
-        console.log((j - i) < windowLength);
-        const endWord = s.substring(j, j + wordLength);
-        console.log(endWord);
-        j += wordLength;
-
-        if (endWord in map) {
-            map[endWord]--;
-            if (map[endWord] === 0) count--;
-        }
-
-        if (count > 0 && (j-i) <= windowLength) continue;
-
-        while (count === 0 || (j - i) > windowLength) {
-            const startWord = s.substring(i, i + wordLength);
-            console.log(`\tStart word: ${startWord}`);
-            i += wordLength;
-            if (startWord in map) {
-                map[startWord]++;
-                if (map[startWord] > 0) count ++;
+    while (j <= s.length) {
+        while ((j - i) < windowLength) {
+            const endWord = s.substring(j, j + wordLength);
+            j += wordLength;
+            if (endWord in map) {
+                map[endWord]--;
+                if (map[endWord] === 0) count--;
+                // print(s, i, j, count, map);
             }
-            console.log(`\t${map}`);
         }
 
-        result.push(i-wordLength);
+        if (count === 0) {
+            result.push(i);
+        }
+
+        const startWord = s.substring(i, i + wordLength);
+        i += wordLength;
+        if (startWord in map) {
+            map[startWord]++;
+            if (map[startWord] > 0) count++;
+        }
     }
     return result;
 }
-
-
 
 s1 = "barfoothefoobarman";
 words1 = ["foo", "bar"];
@@ -47,10 +48,10 @@ s2 = "wordgoodgoodgoodbestword";
 words2 = ["word", "good", "best", "word"];
 s3 = "barfoofoobarthefoobarman";
 words3 = ["bar", "foo", "the"];
-s4 = "wordgoodgoodgoodbestword";
-words4 = ["word","good","best","good"];
+s4 = "wordgoodgoodgoodbestword";    // Expect [8]
+words4 = ["word", "good", "best", "good"];
 
-// console.log(findSubstring(s1, words1));
-// console.log(findSubstring(s2, words2));
-// console.log(findSubstring(s3, words3));
+console.log(findSubstring(s1, words1));
+console.log(findSubstring(s2, words2));
+console.log(findSubstring(s3, words3));
 console.log(findSubstring(s4, words4));
